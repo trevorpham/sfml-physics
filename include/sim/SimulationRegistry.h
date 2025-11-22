@@ -12,8 +12,8 @@ public:
 	// create a type-alias named Factory whose type is pointer to function of return type Simulation *
 	typedef Simulation* (*Factory)();
 
-	// replaces the default constructor. creates a SimulationRegistry on first call
-	// subsequent calls return the initially created object; it does not create another
+	// call this instead of the constructor. creates a SimulationRegistry on first call.
+	// subsequent calls return the initially created object; it does not create another.
 	// ensures only one instance of SimulationRegistry exists (singleton pattern)
 	static SimulationRegistry& instance() {
 		static SimulationRegistry s_instance;
@@ -28,21 +28,27 @@ public:
 		return true;
 	}
 
-	// create a 
+	// create a Simulation from one of the registered factories
 	Simulation* create(const std::string& id) {
 		auto f = factories_.find(id);
 		if (f == factories_.end()) return nullptr;
 		return (f->second)();
 	}
 
-	std::vector<std::string> const available() {
+	// get registered ids
+	std::vector<std::string> const list() {
 		std::vector<std::string> ids;
 		for (const auto& f : factories_) ids.push_back(f.first);
 		return ids;
 	}
 
 private:
+	// constructor can only be called through the instance() method
 	SimulationRegistry() = default;
+	// disable copy constructor
+	SimulationRegistry(const SimulationRegistry&) = delete;
+	// disable move operation
+	SimulationRegistry& operator=(const SimulationRegistry&) = delete;
 	std::map<std::string, Factory> factories_;
 };
 
