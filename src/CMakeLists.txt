@@ -1,7 +1,8 @@
-add_executable(PhysicsSims
-	main.cpp
-	sim/BallWithinBoxCollision.cpp
-)
+add_executable(PhysicsSims 
+"main.cpp"
+"sim/BallWithinBoxCollision.cpp"
+"sim/BouncingDVDLogo.cpp"
+ "main_helpers.cpp")
 
 target_include_directories(PhysicsSims PRIVATE
 	${CMAKE_SOURCE_DIR}/include
