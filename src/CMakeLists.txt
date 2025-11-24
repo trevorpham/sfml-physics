@@ -1,5 +1,6 @@
 add_executable(PhysicsSims 
 "main.cpp"
+"sim/SimulationRegistry.cpp"
 "sim/BallWithinBoxCollision.cpp"
 "sim/BouncingDVDLogo.cpp"
  "main_helpers.cpp")
