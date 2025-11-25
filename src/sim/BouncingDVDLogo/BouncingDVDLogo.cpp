@@ -10,6 +10,7 @@ namespace {
 	class BouncingDVDLogo : public sim::Simulation {
 	private:
 		sf::RectangleShape shape_;
+		sf::Texture texture_;
 		float const width_{ 220.f };
 		float const height_{ 150.f };
 		sf::Vector2f const shapeSize_{ width_, height_ };
@@ -33,11 +34,18 @@ namespace {
 			windowSize_ = window.getSize();
 			shape_.setSize(shapeSize_);
 			shape_.setOrigin(sf::Vector2f(width_ / 2.f, height_ / 2.f));
-			shape_.setFillColor(sf::Color::Blue);
 			shape_.setPosition(sf::Vector2(
 				static_cast<float>(windowSize_.x) / 2.f,
 				static_cast<float>(windowSize_.y) / 2.f
 			));
+
+			if (texture_.loadFromFile("assets/images/dvd-1-red.png")) {
+				shape_.setTexture(&texture_);
+			}
+			else {
+				std::cout << "Failed to load dvd logo texture.\n";
+				shape_.setFillColor(sf::Color::Red);
+			}
 		}
 
 		void update(float dt) override {
@@ -75,8 +83,8 @@ namespace {
 		Registrar() {
 			bool registered = sim::SimulationRegistry::instance()
 				.registerSimulation("bouncing_dvd_logo", []() -> sim::Simulation* {
-				return new BouncingDVDLogo();
-					});
+					return new BouncingDVDLogo();
+				});
 			std::cout << (registered ? "Success" : "Failed") << ": Register bouncing_dvd_logo\n";
 		}
 	};
