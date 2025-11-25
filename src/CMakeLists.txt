@@ -1,8 +1,8 @@
 add_executable(PhysicsSims 
 "main.cpp"
 "sim/SimulationRegistry.cpp"
-"sim/BallWithinBoxCollision.cpp"
-"sim/BouncingDVDLogo.cpp"
+"sim/BallWithinBoxCollision/BallWithinBoxCollision.cpp"
+"sim/BouncingDVDLogo/BouncingDVDLogo.cpp"
  "main_helpers.cpp")
 
 target_include_directories(PhysicsSims PRIVATE
@@ -11,3 +11,9 @@ target_include_directories(PhysicsSims PRIVATE
 
 target_compile_features(PhysicsSims PRIVATE cxx_std_17)
 target_link_libraries(PhysicsSims PRIVATE SFML::Graphics)
+
+add_custom_command(TARGET PhysicsSims POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${ASSETS_DIR}
+		$<TARGET_FILE_DIR:PhysicsSims>/assets
+)

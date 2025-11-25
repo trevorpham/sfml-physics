@@ -22,6 +22,7 @@ public:
 	void init(sf::RenderWindow& window) override {
 		boxSize_ = window.getSize();
 		shape_.setRadius(radius_);
+		shape_.setOrigin(sf::Vector2f(radius_, radius_));
 		shape_.setFillColor(sf::Color::Blue);
 		shape_.setPosition(sf::Vector2(
 			static_cast<float>(boxSize_.x) / 2.f,
@@ -36,23 +37,23 @@ public:
 
 		// collision with a wall causes the velocity component that caused the impact to be inverted
 		// collision with left-hand boundary
-		if (pos.x < 0.f) {
-			pos.x = 0.f;
+		if (pos.x < 0.f + radius_) {
+			pos.x = 0.f + radius_;
 			velocity_.x = std::abs(velocity_.x);
 		}
 		// collision with top boundary
-		if (pos.y < 0.f) {
-			pos.y = 0.f;
+		if (pos.y < 0.f + radius_) {
+			pos.y = 0.f + radius_;
 			velocity_.y = std::abs(velocity_.y);
 		}
 		// collision with right-hand boundary
-		if (pos.x > static_cast<float>(boxSize_.x) - 2*radius_) {
-			pos.x = static_cast<float>(boxSize_.x) - 2*radius_;
+		if (pos.x > static_cast<float>(boxSize_.x) - radius_) {
+			pos.x = static_cast<float>(boxSize_.x) - radius_;
 			velocity_.x = -std::abs(velocity_.x);
 		}
 		// collision with bottom boundary
-		if (pos.y > static_cast<float>(boxSize_.y) - 2*radius_) {
-			pos.y = static_cast<float>(boxSize_.y) - 2*radius_;
+		if (pos.y > static_cast<float>(boxSize_.y) - radius_) {
+			pos.y = static_cast<float>(boxSize_.y) - radius_;
 			velocity_.y = -std::abs(velocity_.y);
 		}
 
