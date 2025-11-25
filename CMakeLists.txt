@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(SFMLPhysicsSims LANGUAGES CXX)
 
+set(ASSETS_DIR ${CMAKE_SOURCE_DIR}/assets)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 include(FetchContent)
