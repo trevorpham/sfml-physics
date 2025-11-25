@@ -9,8 +9,9 @@ namespace {
 class BallWithinBoxCollision : public sim::Simulation {
 private:
 	sf::CircleShape shape_;
+	sf::Vector2f position_;
 	sf::Vector2f velocity_;
-	const float radius_ = 12.f;
+	const float radius_ = 40.f;
 	sf::Vector2u boxSize_{ 800, 600 };
 public:
 	BallWithinBoxCollision() {
@@ -24,14 +25,15 @@ public:
 		shape_.setRadius(radius_);
 		shape_.setOrigin(sf::Vector2f(radius_, radius_));
 		shape_.setFillColor(sf::Color::Blue);
-		shape_.setPosition(sf::Vector2(
+		position_ = sf::Vector2(
 			static_cast<float>(boxSize_.x) / 2.f,
 			static_cast<float>(boxSize_.y) / 2.f
-		));
+		);
+		shape_.setPosition(position_);
 	}
 
 	void update(float dt) override {
-		sf::Vector2f pos = shape_.getPosition();
+		sf::Vector2f pos = position_;
 		// calculate preliminary new position then check for collision
 		pos += velocity_ * dt;
 
@@ -57,7 +59,19 @@ public:
 			velocity_.y = -std::abs(velocity_.y);
 		}
 
+		position_ = pos;
 		shape_.setPosition(pos);
+	}
+
+	void interpolate(float alpha, float dt) {
+		// do not extrapolate, and do not let negative values of alpha run the animation backwards
+		if (alpha <= 0.f || alpha >= 1.f) return;
+
+		// calculate position of shape in next sim update, then set drawing position in between it
+		// and position_, according to value of alpha
+		sf::Vector2f nextPosition = position_ + velocity_ * dt;
+		sf::Vector2f interpolated = position_ + (nextPosition - position_) * alpha;
+		shape_.setPosition(interpolated);
 	}
 
 	void render(sf::RenderWindow& window) override { window.draw(shape_); }
