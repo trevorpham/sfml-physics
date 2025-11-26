@@ -1,5 +1,6 @@
 #include "sim/Simulation.h"
 #include "sim/SimulationRegistry.h"
+#include "config.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 #include <random>
@@ -15,10 +16,12 @@ namespace {
 		float const height_{ 150.f };
 		sf::Vector2f const shapeSize_{ width_, height_ };
 		float const speed_{ 230.f };
+		sf::Vector2f position_;
 		sf::Vector2f velocity_;
-		sf::Vector2u windowSize_{ 800, 600 };
-		std::mt19937 rng_;
+		sf::Vector2u windowSize_{ 800, 600 }; // set internal bounds of box
+		std::mt19937 rng_; // randomly select direction of initial velocity
 		std::uniform_real_distribution<float> angleDist_{ 0.f, 2.f * 3.14159265358979323846f };
+
 	public:
 		BouncingDVDLogo() : rng_(std::random_device{}()) {
 			float const initAngle{ angleDist_(rng_) };
@@ -34,10 +37,11 @@ namespace {
 			windowSize_ = window.getSize();
 			shape_.setSize(shapeSize_);
 			shape_.setOrigin(sf::Vector2f(width_ / 2.f, height_ / 2.f));
-			shape_.setPosition(sf::Vector2(
+			position_ = sf::Vector2(
 				static_cast<float>(windowSize_.x) / 2.f,
 				static_cast<float>(windowSize_.y) / 2.f
-			));
+			);
+			shape_.setPosition(position_);
 
 			if (texture_.loadFromFile("assets/images/dvd-1-red.png")) {
 				shape_.setTexture(&texture_);
@@ -49,7 +53,7 @@ namespace {
 		}
 
 		void update(float dt) override {
-			sf::Vector2f pos = shape_.getPosition();
+			sf::Vector2f pos = position_;
 			pos += velocity_ * dt;
 			float leftEdge = pos.x - width_ / 2.f;
 			float rightEdge = pos.x + width_ / 2.f;
@@ -73,7 +77,19 @@ namespace {
 				velocity_.y = -std::abs(velocity_.y);
 			}
 
+			position_ = pos;
 			shape_.setPosition(pos);
+		}
+
+		void interpolate(float alpha, float dt) {
+			// do not extrapolate, and do not let negative values of alpha run the animation backwards
+			if (alpha <= 0.f || alpha >= 1.f) return;
+			
+			// calculate position of shape in next sim update, then set drawing position in between it
+			// and position_, according to value of alpha
+			sf::Vector2f nextPosition = position_ + velocity_ * dt;
+			sf::Vector2f interpolated = position_ + (nextPosition - position_) * alpha;
+			shape_.setPosition(interpolated);
 		}
 
 		void render(sf::RenderWindow& window) override { window.draw(shape_); }

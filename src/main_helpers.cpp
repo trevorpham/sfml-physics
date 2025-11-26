@@ -50,6 +50,11 @@ void nextFrame(sf::RenderWindow& window, sim::Simulation*& currentSim, sf::Clock
         if (currentSim) currentSim->update(app::config::kFixedTimeStep);
         accumulatedTime -= app::config::kFixedTimeStep;
     }
+    // Do interpolation between frames for smoother animation
+    // Smooths animation stutters caused by desync between framerate and physics update rate
+    // This value is the fraction of time elapsed until the next physics update
+    float const alpha = accumulatedTime / app::config::kFixedTimeStep;
+    if (currentSim) currentSim->interpolate(alpha, app::config::kFixedTimeStep);
 
     window.clear(sf::Color::White);
     if (currentSim) currentSim->render(window);

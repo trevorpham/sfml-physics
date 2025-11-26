@@ -21,7 +21,9 @@ int main()
 
     sim::Simulation* currentSim = nullptr;
     sf::Clock clock;
-    float accumulatedTime = 0.f; // 
+    // The time taken to render each frame is added to this value. Once it reaches a user-specified threshold
+    // the simulation will update its state and the value of that threshold is subtracted.
+    float accumulatedTime = 0.f;
 
     while (window.isOpen()) {
         app::handleEvents(window, currentSim, list, reg);
