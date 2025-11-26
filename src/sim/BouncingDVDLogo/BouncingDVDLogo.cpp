@@ -81,7 +81,7 @@ namespace {
 			shape_.setPosition(pos);
 		}
 
-		void interpolate(float alpha, float dt) {
+		void interpolate(float alpha, float dt) override {
 			// do not extrapolate, and do not let negative values of alpha run the animation backwards
 			if (alpha <= 0.f || alpha >= 1.f) return;
 			
