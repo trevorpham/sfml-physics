@@ -1,18 +1,16 @@
 # SFML Physics Simulations
 
-A collection of simple physics simulations made with the SFML C++ library. This project contains a copy of SFML version 3.0.2.
+A collection of simple physics animations made with the SFML C++ library. This project contains a copy of SFML version 3.0.2.
 
 ## How to build this project
 
 ### Command line
 
 1. Install [Git](https://git-scm.com/downloads) and [CMake](https://cmake.org/download/). Use your system's package manager if available.
-2. Follow [GitHub's instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for how to use their project template feature to create your own project. If you don't want to use GitHub, see the section below.
-3. Clone your new GitHub repo and open the repo in your text editor of choice.
-4. Open [CMakeLists.txt](CMakeLists.txt). Rename the project and the target name of the executable to whatever name you want. Make sure to change all occurrences.
-5. If you want to add or remove any .cpp files, change the source files listed in the `add_executable` call in CMakeLists.txt to match the source files your project requires. If you plan on keeping the default main.cpp file then no changes are required.
-6. If your code uses the Audio or Network modules then add `SFML::Audio` or `SFML::Network` to the `target_link_libraries` call alongside the existing `SFML::Graphics` library that is being linked.
-7. If you use Linux, install SFML's dependencies using your system package manager. On Ubuntu and other Debian-based distributions you can use the following commands:
+2. Clone your new GitHub repo and open the repo in your text editor of choice.
+3. If you want to add or remove any .cpp files, change the source files listed in the `add_executable` call in src/CMakeLists.txt.
+4. If you want to add other SFML modules, such as Audio or Network, then add `SFML::<ModuleName>` to the `target_link_libraries` call alongside the existing `SFML::Graphics` library that is being linked.
+5. If you use Linux, install SFML's dependencies using your system package manager. On Ubuntu and other Debian-based distributions you can use the following commands:
    ```
    sudo apt update
    sudo apt install \
@@ -27,7 +25,7 @@ A collection of simple physics simulations made with the SFML C++ library. This 
        libegl1-mesa-dev \
        libfreetype-dev
    ```
-8. Configure and build your project. Most popular IDEs support CMake projects with very little effort on your part.
+6. Configure and build your project. Most popular IDEs support CMake projects with very little effort on your part.
 
    - [VS Code](https://code.visualstudio.com) via the [CMake extension](https://code.visualstudio.com/docs/cpp/cmake-linux)
    - [Visual Studio](https://docs.microsoft.com/en-us/cpp/build/cmake-projects-in-visual-studio?view=msvc-170)
@@ -42,7 +40,7 @@ A collection of simple physics simulations made with the SFML C++ library. This 
    cmake --build build
    ```
 
-9. Enjoy!
+7. When you run the executable, a console window will open with printed instructions. Press a number on your keyboard to run the corresponding simulation. Press Esc to exit.
 
 ### Visual Studio
 
